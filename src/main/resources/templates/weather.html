@@ -4,44 +4,51 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Weather</title>
+    <!-- Odkaz na Vue.js -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
     <!-- Odkaz na Chart.js -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
 </head>
 <body>
-<div>
+<div id="app">
     <canvas id="weatherChart"></canvas>
 </div>
 
 <script th:inline="javascript">
-    /* Získejte data o počasí z modelu Thymeleaf */
+    // Získání dat o počasí z Thymeleaf modelu
     var weatherDTO = /*[[${weatherDTO}]]*/ {};
 
-    // Zpracování dat do formátu pro graf
-    var hourlyTemperatures = JSON.parse(weatherDTO.hourlyTemperatures);
-    var labels = Object.keys(hourlyTemperatures);
-    var temperatures = Object.values(hourlyTemperatures);
+    new Vue({
+        el: '#app',
+        mounted() {
+            // Zpracování dat do formátu pro graf
+            var hourlyTemperatures = JSON.parse(weatherDTO.hourlyTemperatures);
+            var labels = Object.keys(hourlyTemperatures);
+            var temperatures = Object.values(hourlyTemperatures);
 
-    // Vytvoření a konfigurace grafu pomocí Chart.js
-    var ctx = document.getElementById('weatherChart').getContext('2d');
-    var myChart = new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: labels,
-            datasets: [{
-                label: 'Teplota',
-                data: temperatures,
-                backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                borderColor: 'rgba(255, 99, 132, 1)',
-                borderWidth: 1
-            }]
-        },
-        options: {
-            scales: {
-                y: {
-                    suggestedMin: -20,
-                    suggestedMax: 40
+            // Vytvoření a konfigurace grafu pomocí Chart.js
+            var ctx = document.getElementById('weatherChart').getContext('2d');
+            var myChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Teplota',
+                        data: temperatures,
+                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                        borderColor: 'rgba(255, 99, 132, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            suggestedMin: -20,
+                            suggestedMax: 40
+                        }
+                    }
                 }
-            }
+            });
         }
     });
 </script>
