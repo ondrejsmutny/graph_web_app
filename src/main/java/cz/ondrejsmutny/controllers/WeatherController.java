@@ -27,7 +27,6 @@ public class WeatherController {
         }
 
         WeatherDTO weatherDTO = new WeatherDTO(hourlyTemperatures);
-
         model.addAttribute("weatherDTO", weatherDTO);
 
         return "weather";

@@ -1,62 +1,62 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Weather</title>
-    <!-- Odkazy na JavaScriptové knihovny -->
-    <script th:src="|https://cdn.jsdelivr.net/npm/vue@2|"></script>
-    <script th:src="|https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js|"></script>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Weather</title>
+        <!-- JavaScript libraries links -->
+        <script th:src="|https://cdn.jsdelivr.net/npm/vue@2|"></script>
+        <script th:src="|https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js|"></script>
 
-    <script th:inline="javascript">
-        // Získání dat o počasí z Thymeleaf modelu
-        var weatherDTO = /*[[${weatherDTO}]]*/ {};
+        <script th:inline="javascript">
+            // Getting weather data from model
+            var weatherDTO = /*[[${weatherDTO}]]*/ {};
 
-        // Globální konfigurace fontu pro celý graf
-        Chart.defaults.font.size *= 1.2;
-    </script>
-</head>
-<body>
-<h1 style="text-align: center;">Teploty v následujících 24 hodinách</h1> <!-- Nadpis ve velkých písmenech -->
-<div id="app">
-    <canvas id="weatherChart" height="80"></canvas>
-</div>
+            // Global font configuration for graph
+            Chart.defaults.font.size *= 1.2;
+        </script>
+    </head>
+    <body>
+        <h1 style="text-align: center;">Teploty v následujících 24 hodinách</h1>
+        <div id="app">
+            <canvas id="weatherChart" height="80"></canvas>
+        </div>
 
-<script th:inline="javascript">
-    new Vue({
-        el: '#app',
-        mounted() {
-            // Zpracování dat do formátu pro graf
-            var hourlyTemperatures = JSON.parse(weatherDTO.hourlyTemperatures);
-            var labels = Object.keys(hourlyTemperatures);
-            var temperatures = Object.values(hourlyTemperatures);
+        <script th:inline="javascript">
+            new Vue({
+                el: '#app',
+                mounted() {
+                    // Processing data to format for graph
+                    var hourlyTemperatures = JSON.parse(weatherDTO.hourlyTemperatures);
+                    var labels = Object.keys(hourlyTemperatures);
+                    var temperatures = Object.values(hourlyTemperatures);
 
-            // Vytvoření a konfigurace grafu pomocí Chart.js
-            var ctx = document.getElementById('weatherChart').getContext('2d');
-            var myChart = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: labels,
-                    datasets: [{
-                        label: 'Teplota v °C', // Název legendy pro čáru grafu
-                        data: temperatures,
-                        borderColor: 'blue', // Změna barvy čáry grafu na modrou
-                        borderWidth: 2, // Zvětšení tloušťky čáry grafu o 2x
-                        fill: false // Smazání legendy pro čáru grafu
-                    }]
-                },
-                options: {
-                    scales: {
-                        y: {
-                            suggestedMin: -20, // Minimální hodnota osy Y
-                            suggestedMax: 40, // Maximální hodnota osy Y
-                            display: true // Zobrazení osy Y
+                    // Creating graph using Chart.js
+                    var ctx = document.getElementById('weatherChart').getContext('2d');
+                    var myChart = new Chart(ctx, {
+                        type: 'line',
+                        data: {
+                            labels: labels,
+                            datasets: [{
+                                label: 'Teplota v °C',
+                                data: temperatures,
+                                borderColor: 'blue',
+                                borderWidth: 2,
+                                fill: false
+                            }]
+                        },
+                        options: {
+                            scales: {
+                                y: {
+                                    suggestedMin: -20,
+                                    suggestedMax: 40,
+                                    display: true
+                                }
+                            }
                         }
-                    }
+                    });
                 }
             });
-        }
-    });
-</script>
-</body>
+        </script>
+    </body>
 </html>
